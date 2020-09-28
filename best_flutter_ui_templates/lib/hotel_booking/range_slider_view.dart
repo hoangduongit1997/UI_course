@@ -111,19 +111,34 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     end: _thumbSize,
   );
 
+  double convertRadiusToSigma(double radius) {
+    return radius * 0.57735 + 0.5;
+  }
+
+  Path _rightTriangle(double size, Offset thumbCenter, {bool invert = false}) {
+    final Path thumbPath = Path();
+    final double sign = invert ? -1.0 : 1.0;
+    thumbPath.moveTo(thumbCenter.dx + 5 * sign, thumbCenter.dy);
+    thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy - 5);
+    thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy + 5);
+    thumbPath.close();
+    return thumbPath;
+  }
+
+  Path _leftTriangle(double size, Offset thumbCenter) =>
+      _rightTriangle(size, thumbCenter, invert: true);
+
   @override
-  void paint(
-    PaintingContext context,
-    Offset center, {
-    @required Animation<double> activationAnimation,
-    @required Animation<double> enableAnimation,
-    bool isDiscrete = false,
-    bool isEnabled = false,
-    bool isOnTop,
-    @required SliderThemeData sliderTheme,
-    TextDirection textDirection,
-    Thumb thumb,
-  }) {
+  void paint(PaintingContext context, Offset center,
+      {Animation<double> activationAnimation,
+      Animation<double> enableAnimation,
+      bool isDiscrete,
+      bool isEnabled,
+      bool isOnTop,
+      TextDirection textDirection,
+      SliderThemeData sliderTheme,
+      Thumb thumb,
+      bool isPressed}) {
     final Canvas canvas = context.canvas;
     final ColorTween colorTween = ColorTween(
       begin: sliderTheme.disabledThumbColor,
@@ -173,21 +188,4 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     canvas.drawCircle(Offset(center.dx, center.dy), 10, cPaint);
     canvas.drawPath(thumbPath, Paint()..color = Colors.white);
   }
-
-  double convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
-  }
-
-  Path _rightTriangle(double size, Offset thumbCenter, {bool invert = false}) {
-    final Path thumbPath = Path();
-    final double sign = invert ? -1.0 : 1.0;
-    thumbPath.moveTo(thumbCenter.dx + 5 * sign, thumbCenter.dy);
-    thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy - 5);
-    thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy + 5);
-    thumbPath.close();
-    return thumbPath;
-  }
-
-  Path _leftTriangle(double size, Offset thumbCenter) =>
-      _rightTriangle(size, thumbCenter, invert: true);
 }

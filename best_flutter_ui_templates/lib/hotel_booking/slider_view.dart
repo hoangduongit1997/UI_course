@@ -89,6 +89,10 @@ class CustomThumbShape extends SliderComponentShape {
     end: _thumbSize,
   );
 
+  double convertRadiusToSigma(double radius) {
+    return radius * 0.57735 + 0.5;
+  }
+
   @override
   void paint(
     PaintingContext context,
@@ -101,6 +105,8 @@ class CustomThumbShape extends SliderComponentShape {
     SliderThemeData sliderTheme,
     TextDirection textDirection,
     double value,
+    double textScaleFactor,
+    Size sizeWithOverflow,
   }) {
     final Canvas canvas = context.canvas;
     final ColorTween colorTween = ColorTween(
@@ -124,9 +130,5 @@ class CustomThumbShape extends SliderComponentShape {
     canvas.drawCircle(Offset(thumbCenter.dx, thumbCenter.dy), 12, cPaint);
     cPaint..color = colorTween.evaluate(enableAnimation);
     canvas.drawCircle(Offset(thumbCenter.dx, thumbCenter.dy), 10, cPaint);
-  }
-
-  double convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
   }
 }
